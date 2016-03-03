@@ -15,7 +15,7 @@ public class DummyRule extends Rule {
 
 	@Override
 	protected RuleOutput runner() {
-		System.out.println(name + ": " + valid);
+		// System.out.println(name + ": " + valid);
 		return new RuleOutput(valid);
 	}
 
@@ -35,4 +35,8 @@ public class DummyRule extends Rule {
 		this.valid = valid;
 	}
 
+	@Override
+	public String toString() {
+		return "DummyRule [name=" + name + "]";
+	}
 }

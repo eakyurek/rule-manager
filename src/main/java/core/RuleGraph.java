@@ -1,5 +1,7 @@
 package core;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,7 +46,7 @@ public class RuleGraph {
 	 * @return
 	 */
 	public boolean addRule(Rule rule) {
-		if(ruleSet.contains(rule)) {
+		if (ruleSet.contains(rule)) {
 			throw new IllegalArgumentException("A rule object can not be added more than once");
 		}
 		return ruleSet.add(rule);
@@ -62,12 +64,44 @@ public class RuleGraph {
 	public void addRelation(Rule parent, Rule child) {
 		if (!ruleSet.contains(parent) || !ruleSet.contains(child)) {
 			throw new IllegalArgumentException("Parent and child rules should be added in the graph beforehand");
-		} else if(parent == child) {
+		} else if (parent == child) {
 			throw new IllegalArgumentException("Parent and child rules can not be the same object");
+		} else if (isBackEdge(parent, child)) {
+			throw new IllegalArgumentException("Adding this relation causes a cycle in the graph. Parent: " + parent + ", Child: " + child);
 		}
-		// TODO check cycle
+
 		child.addParent(parent);
 		parent.addChild(child);
+	}
+
+	/**
+	 * Determines if this relation is a back edge of the graph.
+	 * 
+	 * @param parent
+	 * @param child
+	 * @return true if back edge, false if not
+	 */
+	private boolean isBackEdge(Rule parent, Rule child) {
+		Set<Rule> visitedRules = new HashSet<Rule>();
+		Deque<Rule> queue = new ArrayDeque<Rule>();
+		queue.addFirst(parent);
+
+		while (!queue.isEmpty()) {
+			Rule currentRule = queue.pollFirst();
+			visitedRules.add(currentRule);
+
+			if (currentRule.equals(child)) {
+				return true;
+			}
+
+			for (Rule childRule : currentRule.getParentList()) {
+				if (!visitedRules.contains(childRule)) {
+					queue.addFirst(childRule);
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/**
