@@ -16,7 +16,7 @@ The default is BasicGraphValidator which traverses the graph from top down. It v
 
 ##Example
 
-![Alt text](https://drive.google.com/uc?export=view&id=0B_CirRFOmDCybW1qSm9qcGJwTWs "Optional title")
+![Alt text](https://drive.google.com/open?id=0B_CirRFOmDCyNC1ILTh2cnduaDQ "Optional title")
 
 ```java
 public class DummyRule extends Rule {
